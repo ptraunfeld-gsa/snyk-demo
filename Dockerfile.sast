@@ -1,0 +1,4 @@
+FROM node:latest
+RUN npm install -g snyk
+RUN mkdir /code
+RUN chown -R /code 1000:1000
