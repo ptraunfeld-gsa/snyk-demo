@@ -2,13 +2,14 @@ snyk-sast:
   image: node:latest
   when: manual
   variables:
-    SNYK_TOKEN: ${SNYK_TOKEN}
-    ORG_ID: ${ORG_ID}
+    SNYK_CLIENT_ID: ${SNYK_CLIENT_ID}
+    SNYK_CLIENT_SECRET: ${SNYK_CLIENT_SECRET}
+    SNYK_ORG_ID: ${SNYK_ORG_ID}
 
   script:
     - npm install -g snyk
-    - snyk auth --org="${ORG_ID}" --client-id="${SNYK_CLIENT_ID}" --client-secret="${SNYK_CLIENT_SECRET}"
-    - snyk code test --org ${ORG_ID} --sarif --output-sarif-file snyk_sast.sarif
+    - snyk auth --org="${SNYK_ORG_ID}" --client-id="${SNYK_CLIENT_ID}" --client-secret="${SNYK_CLIENT_SECRET}"
+    - snyk code test --org ${SNYK_ORG_ID} --sarif --output-sarif-file snyk_sast.sarif
 
   artifacts:
     reports:
