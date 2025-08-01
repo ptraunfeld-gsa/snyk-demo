@@ -8,6 +8,7 @@ snyk-sast:
 
   script:
     - npm install -g snyk
+    - snyk config environment SNYK-GOV-01
     - snyk auth --org="${SNYK_ORG_ID}" --client-id="${SNYK_CLIENT_ID}" --client-secret="${SNYK_CLIENT_SECRET}"
     - snyk code test --org=${SNYK_ORG_ID} --sarif --sarif-file-output=snyk_sast.sarif
 
