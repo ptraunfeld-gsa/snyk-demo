@@ -1,11 +1,11 @@
-name: Snyk SAST
+name: Snyk SAST HTML Report
 on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
-  Snyk-SAST-Scan:
+  Snyk-SAST-Scan-HTML-Report:
     runs-on: ubuntu-latest
     continue-on-error: true
     permissions:
@@ -17,16 +17,24 @@ jobs:
       - uses: actions/setup-node@v4
       - name: install snyk
         run: npm install -g snyk
+      - name: install snyk-to-html
+        run: npm install -g snyk-to-html
       - name: Configure environment
         run: snyk config environment SNYK-GOV-01
       - name: Authenticate with Snyk SaaS
         run: snyk auth --org="${{ secrets.SNYK_ORG_ID }}" --client-id="${{ secrets.SNYK_CLIENT_ID }}" --client-secret="${{ secrets.SNYK_CLIENT_SECRET }}"
       - name: Run SAST
-        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --sarif-file-output=snyk_sast.sarif
+        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --sarif-file-output=snyk_sast.sarif --json | snyk-to-html -o snyk_sast.html
       - name: Upload SARIF file to GitHub
         if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: snyk_sast.sarif
+      - name: Upload HTML Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snyk_sast.html
+          path: snyk_sast.html
 
 
