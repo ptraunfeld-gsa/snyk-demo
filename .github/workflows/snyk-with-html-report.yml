@@ -24,7 +24,7 @@ jobs:
       - name: Authenticate with Snyk SaaS
         run: snyk auth --org="${{ secrets.SNYK_ORG_ID }}" --client-id="${{ secrets.SNYK_CLIENT_ID }}" --client-secret="${{ secrets.SNYK_CLIENT_SECRET }}"
       - name: Run SAST
-        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --sarif-file-output=snyk_sast.sarif --json | snyk-to-html -o snyk_sast.html
+        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --sarif-file-output=${{ github.head_ref || github.ref_name }}.sarif --json | snyk-to-html -o ${{ github.head_ref || github.ref_name }}_sast_report.html
       - name: Upload SARIF file to GitHub
         if: always()
         uses: github/codeql-action/upload-sarif@v3
@@ -34,7 +34,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: snyk_sast.html
-          path: snyk_sast.html
+          name: ${{ github.head_ref || github.ref_name }}_sast_report.html
+          path: ${{ github.head_ref || github.ref_name }}_sast_report.html
 
 
