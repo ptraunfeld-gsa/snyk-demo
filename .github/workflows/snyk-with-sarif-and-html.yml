@@ -1,11 +1,9 @@
-name: Snyk SAST HTML Report
+name: Snyk SAST - SARIF Upload and HTML Report
 on:
-  push:
-    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
-  Snyk-SAST-Scan-HTML-Report:
+  Snyk-SAST-Scan-SARIF-and-HTML-Report:
     runs-on: ubuntu-latest
     continue-on-error: true
     permissions:
@@ -24,7 +22,12 @@ jobs:
       - name: Authenticate with Snyk SaaS
         run: snyk auth --org="${{ secrets.SNYK_ORG_ID }}" --client-id="${{ secrets.SNYK_CLIENT_ID }}" --client-secret="${{ secrets.SNYK_CLIENT_SECRET }}"
       - name: Run SAST
-        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}"  --json | snyk-to-html -o ${{ github.head_ref || github.ref_name }}_sast_report.html
+        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --sarif-file-output=${{ github.head_ref || github.ref_name }}.sarif --json | snyk-to-html -o ${{ github.head_ref || github.ref_name }}_sast_report.html
+      - name: Upload SARIF file to GitHub
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ${{ github.head_ref || github.ref_name }}.sarif
       - name: Upload HTML Report
         if: always()
         uses: actions/upload-artifact@v4
