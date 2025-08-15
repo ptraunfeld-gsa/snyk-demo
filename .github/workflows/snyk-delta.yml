@@ -1,11 +1,11 @@
 name: Snyk SAST Delta
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "delta-test" ]
   workflow_dispatch:
 
 jobs:
-  Snyk-SAST-Scan:
+  Snyk-SAST-Scan-Delta:
     runs-on: ubuntu-latest
     continue-on-error: true
     permissions:
@@ -23,7 +23,8 @@ jobs:
         run: snyk auth --org="${{ secrets.SNYK_ORG_ID }}" --client-id="${{ secrets.SNYK_CLIENT_ID }}" --client-secret="${{ secrets.SNYK_CLIENT_SECRET }}"
       - name: Scan this branch
         run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --sarif-file-output=${{ github.head_ref || github.ref_name }}.sarif
-      - name: Checkout the main branch 
+      - name: Checkout the main branch
+        if: always()
         run: git checkout main
       - name: Scan the main branch 
         run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --sarif-file-output=main.sarif
