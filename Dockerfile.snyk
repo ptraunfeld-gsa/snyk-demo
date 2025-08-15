@@ -1,0 +1,10 @@
+FROM node:latest
+RUN npm install -g snyk
+RUN npm install -g snyk-to-html
+RUN snyk config environment SNYK-GOV-01
+RUN mkdir /code
+RUN chown -R 1000:1000 /code 
+WORKDIR /code
+CMD snyk config set org "${SNYK_ORG_ID}" && \
+    snyk auth --client-id="${SNYK_CLIENT_ID}" --client-secret="${SNYK_CLIENT_SECRET}" && \
+    bash

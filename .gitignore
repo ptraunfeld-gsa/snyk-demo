@@ -10,5 +10,7 @@ target/
 .classpath
 .project
 .settings/
-.env**/__pycache__/
+.env
+**/__pycache__/
 **/*.html
+.dccache
