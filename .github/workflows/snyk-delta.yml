@@ -36,7 +36,7 @@ jobs:
         run: python -m pip install sarif-tools
       - name: Diff the sarifs
         if: always()
-        run: python -m sarif diff "$RUNNER_TEMP"/main.sarif "$RUNNER_TEMP"/${{ github.head_ref || github.ref_name }}.sarif > main_${{ github.head_ref || github.ref_name }}_delta.txt
+        run: python -m sarif diff "$RUNNER_TEMP"/main.sarif "$RUNNER_TEMP"/${{ github.head_ref || github.ref_name }}.sarif | tee main_${{ github.head_ref || github.ref_name }}_delta.txt
       - name: Upload the delta
         if: always()
         uses: actions/upload-artifact@v4
