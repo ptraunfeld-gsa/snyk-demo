@@ -633,12 +633,12 @@ public class UserController extends AbstractBaseController {
 		}
         return "user/ssrf";
     }
-   
+    
     @GetMapping("/ssrf2")
     public String ssrfExploit2(Model model, @Param("url") String url) {
     	
     	if (Objects.isNull(url) || url.isEmpty())
-    		return "user/ssrf";
+    		return "user/ssrf2";
     	
     	
     	URL urlLoc;
@@ -654,7 +654,29 @@ public class UserController extends AbstractBaseController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        return "user/ssrf";
+        return "user/ssrf2";
+    }
+ 
+    @GetMapping("/ssrf3")
+    public String ssrfExploit3(Model model, @Param("url") String url) {
+    	
+    	if (Objects.isNull(url) || url.isEmpty())
+    		return "user/ssrf3";
+    	
+    	
+    	URL urlLoc;
+		try {
+			urlLoc = new URL(url);
+	        URLConnection connection = urlLoc.openConnection();
+	        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {		        	
+		        String body = reader.lines().collect(Collectors.joining());
+		        model.addAttribute("urlcontent", body);
+		        model.addAttribute("url", url);
+	        }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        return "user/ssrf3";
     }
 
     @GetMapping("/command-shell")

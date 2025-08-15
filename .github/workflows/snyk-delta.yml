@@ -1,7 +1,7 @@
 name: Snyk SAST Delta
 on:
   push:
-    branches: [ "delta-test", "feature*" ]
+    branches: [ "feature*" ]
   workflow_dispatch:
 
 jobs:
