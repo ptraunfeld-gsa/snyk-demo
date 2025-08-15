@@ -1,11 +1,11 @@
 name: Snyk SAST Delta
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "delta-test", "feature*" ]
   workflow_dispatch:
 
 jobs:
-  Snyk-SAST-Scan:
+  Snyk-SAST-Scan-Delta:
     runs-on: ubuntu-latest
     continue-on-error: true
     permissions:
@@ -22,15 +22,21 @@ jobs:
       - name: Authenticate with Snyk SaaS
         run: snyk auth --org="${{ secrets.SNYK_ORG_ID }}" --client-id="${{ secrets.SNYK_CLIENT_ID }}" --client-secret="${{ secrets.SNYK_CLIENT_SECRET }}"
       - name: Scan this branch
-        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --sarif-file-output=${{ github.head_ref || github.ref_name }}.sarif
-      - name: Checkout the main branch 
-        run: git checkout main
+        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --sarif-file-output="$RUNNER_TEMP"/${{ github.head_ref || github.ref_name }}.sarif
+      - name: Checkout the main branch
+        if: always()
+        uses: actions/checkout@v5
+        with:
+          ref: main
       - name: Scan the main branch 
-        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --sarif-file-output=main.sarif
+        if: always()
+        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --sarif-file-output="$RUNNER_TEMP"/main.sarif
       - name: Install sarif-tools
+        if: always()
         run: python -m pip install sarif-tools
       - name: Diff the sarifs
-        run: python -m sarif diff main.sarif ${{ github.head_ref || github.ref_name }}.sarif > main_${{ github.head_ref || github.ref_name }}_delta.txt
+        if: always()
+        run: python -m sarif diff "$RUNNER_TEMP"/main.sarif "$RUNNER_TEMP"/${{ github.head_ref || github.ref_name }}.sarif | tee main_${{ github.head_ref || github.ref_name }}_delta.txt
       - name: Upload the delta
         if: always()
         uses: actions/upload-artifact@v4

@@ -60,6 +60,8 @@ public class ApiMessageController {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(ApiMessageController.class);
 
+    private static String SECRET_PASSWORD = "thisshouldbeasecret";
+
     @Autowired
     private UserService userService;
 

@@ -633,6 +633,29 @@ public class UserController extends AbstractBaseController {
 		}
         return "user/ssrf";
     }
+   
+    @GetMapping("/ssrf2")
+    public String ssrfExploit2(Model model, @Param("url") String url) {
+    	
+    	if (Objects.isNull(url) || url.isEmpty())
+    		return "user/ssrf";
+    	
+    	
+    	URL urlLoc;
+		try {
+			urlLoc = new URL(url);
+	        URLConnection connection = urlLoc.openConnection();
+	        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {		        	
+		        String body = reader.lines().collect(Collectors.joining());
+		        model.addAttribute("urlcontent", body);
+		        model.addAttribute("url", url);
+	        }
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return "user/ssrf";
+    }
 
     @GetMapping("/command-shell")
     public String getCommandShell(Model model) {
