@@ -53,16 +53,17 @@ jobs:
         run: diff "${RUNNER_TEMP}/${BRANCH}.csv" "${RUNNER_TEMP}/main.csv"  | tee "${BRANCH}_to_main_csv_delta.txt"
       - name: Issues in branch that are not in main 
         run: comm -23 "${RUNNER_TEMP}/${BRANCH}.csv" "${RUNNER_TEMP}/main.csv" | tee "${BRANCH}_to_main_new_issues.csv"
+      - run: ls -alth
       - name: Upload the delta
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: "${{ vars.BRANCH }}_to_main_csv_delta.txt"
-          path: "${{ vars.BRANCH }}_to_main_csv_delta.txt"
+          name: "${{ env.BRANCH }}_to_main_csv_delta.txt"
+          path: "${{ env.BRANCH }}_to_main_csv_delta.txt"
       - name: Upload New Issues
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: "${{ vars.BRANCH }}_to_main_new_issues.csv"
-          path: "${{ vars.BRANCH }}_to_main_new_issues.csv"
+          name: "${{ env.BRANCH }}_to_main_new_issues.csv"
+          path: "${{ env.BRANCH }}_to_main_new_issues.csv"
 
