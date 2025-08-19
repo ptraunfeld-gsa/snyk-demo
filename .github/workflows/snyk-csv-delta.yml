@@ -57,12 +57,12 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: "${BRANCH}_to_main_csv_delta.txt"
-          path: "${BRANCH}_to_main_csv_delta.txt"
+          name: "${{ vars.BRANCH }}_to_main_csv_delta.txt"
+          path: "${{ vars.BRANCH }}_to_main_csv_delta.txt"
       - name: Upload New Issues
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: "${BRANCH}_to_main_new_issues.csv"
-          path: "${BRANCH}_to_main_new_issues.csv"
+          name: "${{ vars.BRANCH }}_to_main_new_issues.csv"
+          path: "${{ vars.BRANCH }}_to_main_new_issues.csv"
 
