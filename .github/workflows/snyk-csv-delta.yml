@@ -17,7 +17,6 @@ jobs:
       security-events: write
     steps:
       - uses: actions/checkout@master
-      - run: echo "${BRANCH}"
       - uses: actions/setup-node@v4
       - name: install snyk
         run: npm install -g snyk
@@ -27,7 +26,7 @@ jobs:
         run: snyk auth --org="${{ secrets.SNYK_ORG_ID }}" --client-id="${{ secrets.SNYK_CLIENT_ID }}" --client-secret="${{ secrets.SNYK_CLIENT_SECRET }}"
       - name: Scan this branch
         continue-on-error: true
-        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --sarif-file-output="$RUNNER_TEMP"/${{ github.head_ref || github.ref_name }}.sarif
+        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --sarif-file-output="$RUNNER_TEMP"/"$BRANCH".sarif
       - name: Checkout the main branch
         if: always()
         uses: actions/checkout@v5
@@ -40,14 +39,30 @@ jobs:
       - name: Install sarif-tools
         if: always()
         run: python -m pip install sarif-tools
-      - name: Diff the sarifs
+      - name: Create a CSV for the branch scan
         if: always()
-        run: python -m sarif diff "$RUNNER_TEMP"/main.sarif "$RUNNER_TEMP"/${{ github.head_ref || github.ref_name }}.sarif | tee main_${{ github.head_ref || github.ref_name }}_delta.txt
+        run: python -m sarif csv "$RUNNER_TEMP"/"$BRANCH".sarif -o "$RUNNER_TEMP"/"$BRANCH".csv
+      - name: Create a CSV for the main scan
+        if: always()
+        run: python -m sarif csv "$RUNNER_TEMP"/main.sarif -o "$RUNNER_TEMP"/main.csv
+      - name: Sort the branch CSV 
+        run: sort -o "${RUNNER_TEMP}/${BRANCH}.csv" "${RUNNER_TEMP}/${BRANCH}.csv"
+      - name: Sort the main CSV 
+        run: sort -o "${RUNNER_TEMP}/main.csv" "${RUNNER_TEMP}/main.csv"
+      - name: Diff
+        run: diff "${RUNNER_TEMP}/${BRANCH}.csv" "${RUNNER_TEMP}/main.csv"  | tee "${BRANCH}_to_main_csv_delta.txt"
+      - name: Issues in branch that are not in main 
+        run: comm -23 "${RUNNER_TEMP}/${BRANCH}.csv" "${RUNNER_TEMP}/main.csv" | tee "${BRANCH}_to_main_new_issues.csv"
       - name: Upload the delta
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: main_${{ github.head_ref || github.ref_name }}_delta.txt
-          path: main_${{ github.head_ref || github.ref_name }}_delta.txt
-
+          name: "${BRANCH}_to_main_csv_delta.txt"
+          path: "${BRANCH}_to_main_csv_delta.txt"
+      - name: Upload New Issues
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: "${BRANCH}_to_main_new_issues.csv"
+          path: "${BRANCH}_to_main_new_issues.csv"
 
