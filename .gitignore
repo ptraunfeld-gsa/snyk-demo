@@ -16,3 +16,6 @@ target/
 .dccache
 **/*.sarif
 **/*.csv
+archive/
+**/*.txt
+**/*.json
