@@ -1,0 +1,29 @@
+name: Snyk SAST Delta
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  Snyk-SAST-Scan-Delta:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@v4
+      - name: install snyk
+        run: npm install -g snyk
+      - name: Configure environment
+        run: snyk config environment SNYK-GOV-01
+      - name: Authenticate with Snyk SaaS
+        run: snyk auth --org="${{ secrets.SNYK_ORG_ID }}" --client-id="${{ secrets.SNYK_CLIENT_ID }}" --client-secret="${{ secrets.SNYK_CLIENT_SECRET }}"
+      - name: SCA
+        run: snyk monitor --all-projects --org="${{ secrets.SNYK_ORG_ID }}" --remote-repo-url="https://github.com/ptraunfeld-gsa/snyk-demo"
+      - name: SAST 
+        if: always()
+        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --report --remote-repo-url="https://github.com/ptraunfeld-gsa/snyk-demo" --project-name="sast"
+
