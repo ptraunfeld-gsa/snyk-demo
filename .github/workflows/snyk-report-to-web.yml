@@ -1,4 +1,4 @@
-name: Snyk SAST Delta
+name: Snyk SCA and SAST Report to Web
 on:
   push:
     branches: [ "main" ]
