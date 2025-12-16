@@ -7,7 +7,7 @@ on:
 jobs:
   Snyk-SAST:
     runs-on: ubuntu-latest
-    environment: gsa-integration-test
+    environment: gsa-integration-test-2
     continue-on-error: true
     permissions:
       actions: read
