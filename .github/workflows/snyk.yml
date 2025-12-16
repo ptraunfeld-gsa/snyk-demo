@@ -1,12 +1,13 @@
-name: Snyk SCA and SAST Report to Web
+name: Snyk SAST 
 on:
-  # push:
-  #   branches: [ "main" ]
+  push:
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
-  Snyk-SCA-SAST-Report-to-Web:
+  Snyk-SAST:
     runs-on: ubuntu-latest
+    environment: gsa-integration-test
     continue-on-error: true
     permissions:
       actions: read
@@ -17,13 +18,13 @@ jobs:
       - uses: actions/setup-node@v4
       - name: install snyk
         run: npm install -g snyk
+      - name: Snyk CLI Version
+        run: snyk --version
       - name: Configure environment
         run: snyk config environment SNYK-GOV-01
       - name: Authenticate with Snyk SaaS
         run: snyk auth --org="${{ secrets.SNYK_ORG_ID }}" --client-id="${{ secrets.SNYK_CLIENT_ID }}" --client-secret="${{ secrets.SNYK_CLIENT_SECRET }}"
-      - name: SCA
-        run: snyk monitor --all-projects --org="${{ secrets.SNYK_ORG_ID }}" --remote-repo-url="https://github.com/ptraunfeld-gsa/snyk-demo"
       - name: SAST 
         if: always()
-        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --report --remote-repo-url="https://github.com/ptraunfeld-gsa/snyk-demo" --project-name="sast"
+        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" 
 
