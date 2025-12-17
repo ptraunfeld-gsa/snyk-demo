@@ -9,7 +9,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.1.8.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<groupId>com.microfocus.example</groupId>
@@ -43,7 +43,7 @@
 		<jwt.version>0.9.1</jwt.version>
 		<jackson.version>2.13.0</jackson.version>
 		<groovy.version>3.0.8</groovy.version>
-		<selenium.version>4.0.0-rc-2</selenium.version>
+		<selenium.version>4.14.0</selenium.version>
 		<junit.version>4.12</junit.version>
 		<fortify.version>21.2.3</fortify.version>
 		<skip.unit.tests>true</skip.unit.tests>
