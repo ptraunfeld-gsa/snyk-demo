@@ -22,6 +22,7 @@ jobs:
       - name: Authenticate with Snyk SaaS
         run: snyk auth --org="${{ secrets.SNYK_ORG_ID }}" --client-id="${{ secrets.SNYK_CLIENT_ID }}" --client-secret="${{ secrets.SNYK_CLIENT_SECRET }}"
       - name: Scan this branch
+        continue-on-error: true
         run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --sarif-file-output="$RUNNER_TEMP"/${{ github.head_ref || github.ref_name }}.sarif
       - name: Checkout the main branch
         if: always()
@@ -30,6 +31,7 @@ jobs:
           ref: main
       - name: Scan the main branch 
         if: always()
+        continue-on-error: true
         run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --sarif-file-output="$RUNNER_TEMP"/main.sarif
       - name: Install sarif-tools
         if: always()
