@@ -1,7 +1,7 @@
 name: Snyk CSV Delta
 on:
   push:
-    branches: [ "feature*" ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 env:
