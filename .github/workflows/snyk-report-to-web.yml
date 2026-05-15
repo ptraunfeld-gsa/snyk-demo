@@ -1,11 +1,11 @@
-name: Snyk SAST HTML Report
+name: Snyk SCA and SAST Report to Web
 on:
   # push:
   #   branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
-  Snyk-SAST-Scan-HTML-Report:
+  Snyk-SCA-SAST-Report-to-Web:
     runs-on: ubuntu-latest
     continue-on-error: true
     permissions:
@@ -17,19 +17,13 @@ jobs:
       - uses: actions/setup-node@v5
       - name: install snyk
         run: npm install -g snyk
-      - name: install snyk-to-html
-        run: npm install -g snyk-to-html
       - name: Configure environment
         run: snyk config environment SNYK-GOV-01
       - name: Authenticate with Snyk SaaS
         run: snyk auth --org="${{ secrets.SNYK_ORG_ID }}" --client-id="${{ secrets.SNYK_CLIENT_ID }}" --client-secret="${{ secrets.SNYK_CLIENT_SECRET }}"
-      - name: Run SAST
-        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}"  --json | snyk-to-html -o ${{ github.head_ref || github.ref_name }}_sast_report.html
-      - name: Upload HTML Report
+      - name: SCA
+        run: snyk monitor --all-projects --org="${{ secrets.SNYK_ORG_ID }}" --remote-repo-url="https://github.com/ptraunfeld-gsa/snyk-demo"
+      - name: SAST 
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ github.head_ref || github.ref_name }}_sast_report.html
-          path: ${{ github.head_ref || github.ref_name }}_sast_report.html
-
+        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --report --remote-repo-url="https://github.com/ptraunfeld-gsa/snyk-demo" --project-name="sast"
 

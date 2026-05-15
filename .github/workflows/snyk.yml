@@ -1,12 +1,13 @@
-name: Snyk SAST HTML Report
+name: Snyk SAST 
 on:
-  # push:
-  #   branches: [ "main" ]
+  push:
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
-  Snyk-SAST-Scan-HTML-Report:
+  Snyk-SAST:
     runs-on: ubuntu-latest
+    environment: gsa-integration-test-2
     continue-on-error: true
     permissions:
       actions: read
@@ -17,19 +18,15 @@ jobs:
       - uses: actions/setup-node@v5
       - name: install snyk
         run: npm install -g snyk
-      - name: install snyk-to-html
-        run: npm install -g snyk-to-html
+      - name: Snyk CLI Version
+        run: snyk --version
       - name: Configure environment
         run: snyk config environment SNYK-GOV-01
       - name: Authenticate with Snyk SaaS
         run: snyk auth --org="${{ secrets.SNYK_ORG_ID }}" --client-id="${{ secrets.SNYK_CLIENT_ID }}" --client-secret="${{ secrets.SNYK_CLIENT_SECRET }}"
-      - name: Run SAST
-        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}"  --json | snyk-to-html -o ${{ github.head_ref || github.ref_name }}_sast_report.html
-      - name: Upload HTML Report
+      - name: SAST 
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ github.head_ref || github.ref_name }}_sast_report.html
-          path: ${{ github.head_ref || github.ref_name }}_sast_report.html
-
+        run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" 
+      - name: SCA
+        run: snyk test 
 

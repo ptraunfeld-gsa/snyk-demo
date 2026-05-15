@@ -15,7 +15,9 @@ target/
 **/*.html
 .dccache
 **/*.sarif
-**/*.csv
-archive/
-**/*.txt
+
 **/*.json
+**/*.csv
+**/*.txt
+
+archive/
