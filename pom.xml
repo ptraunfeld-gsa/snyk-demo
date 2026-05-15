@@ -9,7 +9,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.1.8.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<groupId>com.microfocus.example</groupId>
@@ -38,12 +38,12 @@
 		<jquery.version>3.5.1</jquery.version>
 		<font-awesome.version>5.15.2</font-awesome.version>
 		<chartjs.version>2.9.4</chartjs.version>
-		<axios.version>0.21.1</axios.version>
-		<springdoc-openapi.version>1.4.3</springdoc-openapi.version>
+		<axios.version>1.15.1</axios.version>
+		<springdoc-openapi.version>1.7.0</springdoc-openapi.version>
 		<jwt.version>0.9.1</jwt.version>
-		<jackson.version>2.13.0</jackson.version>
+		<jackson.version>2.18.7</jackson.version>
 		<groovy.version>3.0.8</groovy.version>
-		<selenium.version>4.0.0-rc-2</selenium.version>
+		<selenium.version>4.14.0</selenium.version>
 		<junit.version>4.12</junit.version>
 		<fortify.version>21.2.3</fortify.version>
 		<skip.unit.tests>true</skip.unit.tests>
@@ -177,7 +177,7 @@
 		<dependency>
 			<groupId>com.vonage</groupId>
 			<artifactId>client</artifactId>
-			<version>6.1.0</version>
+			<version>8.1.0</version>
 		</dependency>
 
 		<dependency>
@@ -218,7 +218,7 @@
 		<dependency>
 			<groupId>org.apache.maven.wagon</groupId>
 			<artifactId>wagon-http</artifactId>
-			<version>3.4.1</version>
+			<version>3.5.3</version>
 		</dependency>
 
 		<dependency>
