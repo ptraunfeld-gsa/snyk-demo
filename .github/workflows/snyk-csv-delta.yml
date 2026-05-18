@@ -16,8 +16,8 @@ jobs:
       contents: read
       security-events: write
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
       - name: install snyk
         run: npm install -g snyk
       - name: Configure environment
@@ -29,7 +29,7 @@ jobs:
         run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --sarif-file-output="$RUNNER_TEMP"/"$BRANCH".sarif
       - name: Checkout the main branch
         if: always()
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: main
       - name: Scan the main branch 
@@ -56,13 +56,13 @@ jobs:
       - run: ls -alth
       - name: Upload the delta
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: "${{ env.BRANCH }}_to_main_csv_delta.txt"
           path: "${{ env.BRANCH }}_to_main_csv_delta.txt"
       - name: Upload New Issues
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: "${{ env.BRANCH }}_to_main_new_issues.csv"
           path: "${{ env.BRANCH }}_to_main_new_issues.csv"

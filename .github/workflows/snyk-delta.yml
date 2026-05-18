@@ -13,8 +13,8 @@ jobs:
       contents: read
       security-events: write
     steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
       - name: install snyk
         run: npm install -g snyk
       - name: Configure environment
@@ -26,7 +26,7 @@ jobs:
         run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" --sarif-file-output="$RUNNER_TEMP"/${{ github.head_ref || github.ref_name }}.sarif
       - name: Checkout the main branch
         if: always()
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: main
       - name: Scan the main branch 
@@ -41,7 +41,7 @@ jobs:
         run: python -m sarif diff "$RUNNER_TEMP"/main.sarif "$RUNNER_TEMP"/${{ github.head_ref || github.ref_name }}.sarif | tee main_${{ github.head_ref || github.ref_name }}_delta.txt
       - name: Upload the delta
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: main_${{ github.head_ref || github.ref_name }}_delta.txt
           path: main_${{ github.head_ref || github.ref_name }}_delta.txt
