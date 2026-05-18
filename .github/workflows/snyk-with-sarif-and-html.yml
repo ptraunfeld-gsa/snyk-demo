@@ -11,7 +11,7 @@ jobs:
       contents: read
       security-events: write
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v5
       - name: install snyk
         run: npm install -g snyk
@@ -30,7 +30,7 @@ jobs:
           sarif_file: ${{ github.head_ref || github.ref_name }}.sarif
       - name: Upload HTML Report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ github.head_ref || github.ref_name }}_sast_report.html
           path: ${{ github.head_ref || github.ref_name }}_sast_report.html
