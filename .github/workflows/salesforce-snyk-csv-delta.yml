@@ -1,4 +1,4 @@
-name: Snyk CSV Delta
+name: Snyk CSV Delta (Salesforce)
 on:
   push:
     branches: [ "csv-delta-help" ]
