@@ -28,5 +28,5 @@ jobs:
         if: always()
         run: snyk code test --org="${{ secrets.SNYK_ORG_ID }}" 
       - name: SCA
-        run: snyk test 
+        run: snyk test --org="${{ secrets.SNYK_ORG_ID }}" 
 
