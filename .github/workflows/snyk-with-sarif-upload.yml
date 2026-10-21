@@ -1,4 +1,4 @@
-name: Snyk SAST
+name: Snyk SAST with SARIF upload
 on:
   # push:
   #   branches: [ "main" ]
